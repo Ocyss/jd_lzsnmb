@@ -1,3 +1,9 @@
+#  Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+#  Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+#  Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+#  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+#  Vestibulum commodo. Ut rhoncus gravida arcu.
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # 京东自动评价
@@ -7,18 +13,35 @@ Author: qiu_lzsnmb
 功能：全自动完成评价+晒单，提高京享值，满足强迫症
 cron: 0 6 */3 * *
 '''
-import os
-import random
-import re
-import sys
-import time
+
+################【参数】######################
+# [填写您要批量评价的范围]  ENV设置： export Ev_Scope='1,2,4-5'
+#  目前只支持逗号(,)和减号(-),默认只评价前3个(1-3)
+Ev_Scope = ''
+
+# 晒单图片更换 ，默认两张裂图随机 ENV设置： export Ev_img='//img30.360buyimg.com/shaidan/······.jpg'
+Ev_img = ''
+
+###############################################
+
+import os, random, re, sys, time
 from urllib.parse import unquote
 # noinspection PyUnresolvedReferences
 from sendNotify import send
-import jieba.analyse
-import requests
 
-jieba.setLogLevel(jieba.logging.INFO)
+try:
+    import requests
+except Exception as e:
+    print(e, "\n缺少requests 模块，请执行命令安装：pip3 install requests")
+    exit(3)
+
+try:
+    import jieba.analyse
+
+    jieba.setLogLevel(jieba.logging.INFO)
+except Exception as e:
+    print(e, "\n缺少jieba 模块，请执行命令安装：pip3 install jieba")
+    exit(3)
 
 pwd = os.path.dirname(os.path.abspath(__file__)) + os.sep
 
@@ -47,6 +70,17 @@ def getEnvs(label):
             return int(label)
     except:
         return label
+
+
+if "Ev_Scope" in os.environ:
+    if len(os.environ["Ev_Scope"]) > 1:
+        Ev_Scope = os.environ["Ev_Scope"]
+        printf(f"已获取并使用Env环境 Ev_Scope:{Ev_Scope}")
+
+if "Ev_img" in os.environ:
+    if len(os.environ["Ev_img"]) > 1:
+        blueCoin_Cc = getEnvs(os.environ["Ev_img"])
+        printf(f"已获取并使用Env环境 Ev_img:{Ev_img}")
 
 
 class getJDCookie(object):
@@ -387,6 +421,7 @@ def start():
 
     # 晒单
     def sunbw(headers, ce):
+        global Ev_img
         url = "https://wq.jd.com/eval/SendEval?g_login_type=0&g_ty=ajax"
         for i, da in enumerate(op(headers, _type=False)):
             if da['cname'] == "追加评价":
@@ -396,13 +431,15 @@ def start():
                     # printf('\t多个商品跳过！')
                     continue
                 url = 'https://comment-api.jd.com/comment/appendComment?sceneval=2&g_login_type=1&g_ty=ajax'
+                if Ev_img == '':
+                    Ev_img = random.sample(
+                        ['//img30.360buyimg.com/shaidan/jfs/t1/139511/17/26249/850/61852a35Ea7906339/f7eb6b9438917f30.jpg', '//img30.360buyimg.com/shaidan/jfs/t1/143995/15/24443/5327/61860ba4Ecba97817/d7faafa606f76b1f.jpg'], 1)
                 data = {
                     'productId': da['pid'],
                     'orderId': da['oid'],
                     'content': context,
                     'userclient': 29,
-                    'imageJson': random.sample(
-                        ['//img30.360buyimg.com/shaidan/jfs/t1/139511/17/26249/850/61852a35Ea7906339/f7eb6b9438917f30.jpg', '//img30.360buyimg.com/shaidan/jfs/t1/143995/15/24443/5327/61860ba4Ecba97817/d7faafa606f76b1f.jpg'], 1)
+                    'imageJson': Ev_img
                 }
                 req = requests.post(url, headers=headers, data=data)
                 if req.json()['data']['result'] != {}:
@@ -417,8 +454,27 @@ def start():
     printf('### 开始批量评价 ###')
     global cookiesList, userNameList, pinNameList, ckNum, beanCount, userCount
     cookiesList, userNameList, pinNameList = getCk.iscookie()
+    Scope = []
+
+    # 范围配置！！
+    try:
+        if Ev_Scope == '':
+            Scope = [1, 2, 3]
+        else:
+            for Sco in Ev_Scope:
+                if '-' in Sco:
+                    b = Sco.split('-')
+                    for x in range(int(b[0]), int(b[1]) + 1):
+                        Scope.append(x)
+                else:
+                    Scope.append(int(Sco))
+    except ValueError:
+        print('当前Ev_Scope出错，程序终止！')
+        exit(3)
 
     for i, ck, user, pin in zip(range(1, len(cookiesList) + 1), cookiesList, userNameList, pinNameList):
+        if i not in Scope:
+            continue
         printf(f"** 开始[账号{i}]-{user} **")
         headers = {
             'cookie': ck,
