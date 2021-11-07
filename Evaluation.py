@@ -13,6 +13,7 @@ import re
 import sys
 import time
 from urllib.parse import unquote
+# noinspection PyUnresolvedReferences
 from sendNotify import send
 import jieba.analyse
 import requests
@@ -186,6 +187,7 @@ class getJDCookie(object):
 getCk = getJDCookie()
 getCk.getCookie()
 # 获取v4环境 特殊处理
+# noinspection PyUnboundLocalVariable
 if os.path.exists(v4f):
     try:
         with open(v4f, 'r', encoding='utf-8') as f:
