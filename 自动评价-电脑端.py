@@ -1,4 +1,4 @@
-# -*- coding: gbk -*-
+# -*- coding: utf-8 -*-
 # @Time : 2021/10/23 17:39
 import random
 import time
@@ -15,93 +15,93 @@ headers = {
 }
 
 
-# ÆÀ¼ÛÉú³É
+# è¯„ä»·ç”Ÿæˆ
 def generation(pname, _class=0, _type=1):
-    # 0ÊÇ×·ÆÀ 1ÊÇÆÀ¼Û
-    # class 0ÊÇÆÀ¼Û 1ÊÇÌáÈ¡id
+    # 0æ˜¯è¿½è¯„ 1æ˜¯è¯„ä»·
+    # class 0æ˜¯è¯„ä»· 1æ˜¯æå–id
     try:
         name = jieba.analyse.textrank(pname, topK=5, allowPOS='n')[0]
     except:
-        name = "±¦±´"
+        name = "å®è´"
     if _class == 1:
         return name
     else:
         datas = {
             1: {
-                "¿ªÊ¼": [
-                    "¿¼ÂÇÂòÕâ¸ö$Ö®Ç°ÎÒÊÇÓĞµ£ĞÄ¹ıµÄ£¬ÒòÎªÎÒ²»ÖªµÀ$µÄÖÊÁ¿ºÍÆ·ÖÊÔõÃ´Ñù£¬µ«ÊÇ¿´ÁËÆÀÂÛºóÎÒ¾Í·ÅĞÄÁË¡£",
-                    "ÂòÕâ¸ö$Ö®Ç°ÎÒÊÇÓĞ¿´¹ıºÃ¼¸¼Òµê£¬×îºó¿´µ½Õâ¼ÒµêµÄÆÀ¼Û²»´í¾Í¾ö¶¨ÔÚÕâ¼ÒµêÂò ",
-                    "¿´ÁËºÃ¼¸¼Òµê£¬Ò²¶Ô±ÈÁËºÃ¼¸¼Òµê£¬×îºó·¢ÏÖ»¹ÊÇÕâÒ»¼ÒµÄ$ÆÀ¼Û×îºÃ¡£",
-                    "¿´À´¿´È¥×îºó»¹ÊÇÑ¡ÔñÁËÕâ¼Ò¡£",
-                    "Ö®Ç°ÔÚÕâ¼ÒµêÒ²Âò¹ıÆäËû¶«Î÷£¬¸Ğ¾õ²»´í£¬Õâ´ÎÓÖÀ´À²¡£",
-                    "Õâ¼ÒµÄ$µÄÕæÊÇÌ«ºÃÓÃÁË£¬ÓÃÁËµÚÒ»´Î¾Í»¹ÏëÔÙÓÃÒ»´Î¡£"
+                "å¼€å§‹": [
+                    "è€ƒè™‘ä¹°è¿™ä¸ª$ä¹‹å‰æˆ‘æ˜¯æœ‰æ‹…å¿ƒè¿‡çš„ï¼Œå› ä¸ºæˆ‘ä¸çŸ¥é“$çš„è´¨é‡å’Œå“è´¨æ€ä¹ˆæ ·ï¼Œä½†æ˜¯çœ‹äº†è¯„è®ºåæˆ‘å°±æ”¾å¿ƒäº†ã€‚",
+                    "ä¹°è¿™ä¸ª$ä¹‹å‰æˆ‘æ˜¯æœ‰çœ‹è¿‡å¥½å‡ å®¶åº—ï¼Œæœ€åçœ‹åˆ°è¿™å®¶åº—çš„è¯„ä»·ä¸é”™å°±å†³å®šåœ¨è¿™å®¶åº—ä¹° ",
+                    "çœ‹äº†å¥½å‡ å®¶åº—ï¼Œä¹Ÿå¯¹æ¯”äº†å¥½å‡ å®¶åº—ï¼Œæœ€åå‘ç°è¿˜æ˜¯è¿™ä¸€å®¶çš„$è¯„ä»·æœ€å¥½ã€‚",
+                    "çœ‹æ¥çœ‹å»æœ€åè¿˜æ˜¯é€‰æ‹©äº†è¿™å®¶ã€‚",
+                    "ä¹‹å‰åœ¨è¿™å®¶åº—ä¹Ÿä¹°è¿‡å…¶ä»–ä¸œè¥¿ï¼Œæ„Ÿè§‰ä¸é”™ï¼Œè¿™æ¬¡åˆæ¥å•¦ã€‚",
+                    "è¿™å®¶çš„$çš„çœŸæ˜¯å¤ªå¥½ç”¨äº†ï¼Œç”¨äº†ç¬¬ä¸€æ¬¡å°±è¿˜æƒ³å†ç”¨ä¸€æ¬¡ã€‚"
                 ],
-                "ÖĞ¼ä": [
-                    "ÊÕµ½»õºóÎÒ·Ç³£µÄ¿ªĞÄ£¬ÒòÎª$µÄÖÊÁ¿ºÍÆ·ÖÊÕæµÄ·Ç³£µÄºÃ£¡",
-                    "²ğ¿ª°ü×°ºó¾ªÑŞµ½ÎÒÁË£¬Õâ¾ÍÊÇÎÒÏëÒªµÄ$!",
-                    "¿ìµİ³¬¿ì£¡°ü×°µÄºÜºÃ£¡£¡ºÜÏ²»¶£¡£¡£¡",
-                    "°ü×°µÄºÜ¾«ÃÀ£¡$µÄÖÊÁ¿ºÍÆ·ÖÊ·Ç³£²»´í£¡",
-                    "ÊÕµ½¿ìµİºóÆÈ²»¼°´ıµÄ²ğÁË°ü×°¡£$ÎÒÕæµÄÊÇ·Ç³£Ï²»¶",
-                    "ÕæÊÇÒ»´ÎÄÑÍüµÄ¹ºÎï£¬Õâ±²×ÓÃ»¼û¹ıÕâÃ´ºÃÓÃµÄ¶«Î÷£¡£¡"
+                "ä¸­é—´": [
+                    "æ”¶åˆ°è´§åæˆ‘éå¸¸çš„å¼€å¿ƒï¼Œå› ä¸º$çš„è´¨é‡å’Œå“è´¨çœŸçš„éå¸¸çš„å¥½ï¼",
+                    "æ‹†å¼€åŒ…è£…åæƒŠè‰³åˆ°æˆ‘äº†ï¼Œè¿™å°±æ˜¯æˆ‘æƒ³è¦çš„$!",
+                    "å¿«é€’è¶…å¿«ï¼åŒ…è£…çš„å¾ˆå¥½ï¼ï¼å¾ˆå–œæ¬¢ï¼ï¼ï¼",
+                    "åŒ…è£…çš„å¾ˆç²¾ç¾ï¼$çš„è´¨é‡å’Œå“è´¨éå¸¸ä¸é”™ï¼",
+                    "æ”¶åˆ°å¿«é€’åè¿«ä¸åŠå¾…çš„æ‹†äº†åŒ…è£…ã€‚$æˆ‘çœŸçš„æ˜¯éå¸¸å–œæ¬¢",
+                    "çœŸæ˜¯ä¸€æ¬¡éš¾å¿˜çš„è´­ç‰©ï¼Œè¿™è¾ˆå­æ²¡è§è¿‡è¿™ä¹ˆå¥½ç”¨çš„ä¸œè¥¿ï¼ï¼"
                 ],
-                "½áÊø": [
-                    "¾­¹ıÁËÕâ´ÎÓä¿ìµÄ¹ºÎï£¬ÎÒ¾ö¶¨Èç¹ûÏÂ´ÎÎÒ»¹ÒªÂò$µÄ»°£¬ÎÒÒ»¶¨»áÔÙÀ´Õâ¼ÒµêÂòµÄ¡£",
-                    "²»´í²»´í£¡",
-                    "ÎÒ»áÍÆ¼öÏëÂò$µÄÅóÓÑÒ²À´Õâ¼ÒµêÀïÂò",
-                    "ÕæÊÇÒ»´ÎÓä¿ìµÄ¹ºÎï£¡",
-                    "´ó´óµÄºÃÆÀ!ÒÔºóÂò$ÔÙÀ´ÄãÃÇµê£¡(£ş¨Œ£ş)",
-                    "´ó¼Ò¿ÉÒÔÂòÀ´ÊÔÒ»ÊÔ£¬ÕæµÄÊÇÌ«Ë¬ÁË£¬Ò»ÍíÉÏ¶¼³Á½şÔÚË¬Ö®ÖĞ"
+                "ç»“æŸ": [
+                    "ç»è¿‡äº†è¿™æ¬¡æ„‰å¿«çš„è´­ç‰©ï¼Œæˆ‘å†³å®šå¦‚æœä¸‹æ¬¡æˆ‘è¿˜è¦ä¹°$çš„è¯ï¼Œæˆ‘ä¸€å®šä¼šå†æ¥è¿™å®¶åº—ä¹°çš„ã€‚",
+                    "ä¸é”™ä¸é”™ï¼",
+                    "æˆ‘ä¼šæ¨èæƒ³ä¹°$çš„æœ‹å‹ä¹Ÿæ¥è¿™å®¶åº—é‡Œä¹°",
+                    "çœŸæ˜¯ä¸€æ¬¡æ„‰å¿«çš„è´­ç‰©ï¼",
+                    "å¤§å¤§çš„å¥½è¯„!ä»¥åä¹°$å†æ¥ä½ ä»¬åº—ï¼(ï¿£â–½ï¿£)",
+                    "å¤§å®¶å¯ä»¥ä¹°æ¥è¯•ä¸€è¯•ï¼ŒçœŸçš„æ˜¯å¤ªçˆ½äº†ï¼Œä¸€æ™šä¸Šéƒ½æ²‰æµ¸åœ¨çˆ½ä¹‹ä¸­"
                 ]
             },
             0: {
-                "¿ªÊ¼": [
-                    "ÓÃÁËÕâÃ´¾ÃµÄ $ ,¶«Î÷ÊÇÕæµÄºÃÓÃ£¬ÕæµÄÄÑÍüÉÏÒ»´Î¹ºÂòÊ±Ê¹ÓÃµÄ¼¤¶¯£¬",
-                    "Ê¹ÓÃÁË¼¸Ìì $ ",
-                    "ÕâÊÇÎÒÂòµ½µÄ×îºÃÓÃµÄ$ ",
-                    "ÎÒ²İ£¬ÊÇÕæµÄºÃÓÃ°¡£¬¼¸ÌìµÄÌåÑéÏÂÀ´£¬ÕæÊÇ»³Áµµ±³õ¹ºÂòÊ±ÏÂµ¥µÄÄÇÒ»¿ÌµÄ¼¤¶¯!!!!!!!!!",
-                    "ÎÒ²İ£¬ÓÃÁË¼¸ÌìÏÂÀ´£¬$ ±äµÃºÃ´óºÃ´ó£¬Õâ¾«ÖÂµÄÍâ¹Û£¬ÕâÏ¸ÄåµÄÆ¤·ô£¬ÃşÉÏÈ¥£¬ÕæÊÇÁîÈË¼¤¶¯£¡",
-                    "$  ÕâĞ¡¼Ò»ï£¬ÕæÊÇÌ«ÁîÈËÓäÔÃÁË£¬ÓÃÁË¶¼ËµºÃºÃºÃºÃ£¡",
-                    "²»ÓÃË¯²»×Å¾õ£¬Õâ¼ÒµêµÄ $ ÕæÊÇÌ«ºÃÓÃÁË¡£",
-                    "ÕæÊÇÅ£±Æ°¡£¬Ò»Ìì²»ÓÃÄÑÊÜÒ»Ìì£¬ÓÃÁËÒ»ÌìÄÑÊÜÒ»Äê£¡"
+                "å¼€å§‹": [
+                    "ç”¨äº†è¿™ä¹ˆä¹…çš„ $ ,ä¸œè¥¿æ˜¯çœŸçš„å¥½ç”¨ï¼ŒçœŸçš„éš¾å¿˜ä¸Šä¸€æ¬¡è´­ä¹°æ—¶ä½¿ç”¨çš„æ¿€åŠ¨ï¼Œ",
+                    "ä½¿ç”¨äº†å‡ å¤© $ ",
+                    "è¿™æ˜¯æˆ‘ä¹°åˆ°çš„æœ€å¥½ç”¨çš„$ ",
+                    "æˆ‘è‰ï¼Œæ˜¯çœŸçš„å¥½ç”¨å•Šï¼Œå‡ å¤©çš„ä½“éªŒä¸‹æ¥ï¼ŒçœŸæ˜¯æ€€æ‹å½“åˆè´­ä¹°æ—¶ä¸‹å•çš„é‚£ä¸€åˆ»çš„æ¿€åŠ¨!!!!!!!!!",
+                    "æˆ‘è‰ï¼Œç”¨äº†å‡ å¤©ä¸‹æ¥ï¼Œ$ å˜å¾—å¥½å¤§å¥½å¤§ï¼Œè¿™ç²¾è‡´çš„å¤–è§‚ï¼Œè¿™ç»†è…»çš„çš®è‚¤ï¼Œæ‘¸ä¸Šå»ï¼ŒçœŸæ˜¯ä»¤äººæ¿€åŠ¨ï¼",
+                    "$  è¿™å°å®¶ä¼™ï¼ŒçœŸæ˜¯å¤ªä»¤äººæ„‰æ‚¦äº†ï¼Œç”¨äº†éƒ½è¯´å¥½å¥½å¥½å¥½ï¼",
+                    "ä¸ç”¨ç¡ä¸ç€è§‰ï¼Œè¿™å®¶åº—çš„ $ çœŸæ˜¯å¤ªå¥½ç”¨äº†ã€‚",
+                    "çœŸæ˜¯ç‰›é€¼å•Šï¼Œä¸€å¤©ä¸ç”¨éš¾å—ä¸€å¤©ï¼Œç”¨äº†ä¸€å¤©éš¾å—ä¸€å¹´ï¼"
                 ],
-                "ÖĞ¼ä": [
-                    "¶«Î÷»¹ĞĞ,",
-                    "È·ÊµÊÇºÃ¶«Î÷£¬ÍÆ¼ö´ó¼Ò¹ºÂò,",
-                    "$  µÄÖÊÁ¿ÕæµÄ·Ç³£²»´í£¡",
-                    "$  ÕæÊÇÌ«ºÃÓÃÁË£¬ÕæÊÇ¸ö±¦±´£¬ÄÑÍüµÄ±¦±´!!",
-                    "$  ¶Ì¶Ì¼¸ÌìµÄÌåÑé£¬ÁîÈËÒ»ÉúÄÑÍü",
-                    "$  ÓÃÁËÕâÃ´¾ÃÁË£¬Ëü³¤µÄÕæÊÇÌ«¿É°®ÁË",
-                    "Õâ¿ÉÕæÊÇ¸öĞ¡±¦±´£¡",
-                    "ÎåĞÇºÃÆÀ£¬°²ÅÅÉÏ£¬Ì«ºÃÓÃÀ­£¡£¡£¡"
+                "ä¸­é—´": [
+                    "ä¸œè¥¿è¿˜è¡Œ,",
+                    "ç¡®å®æ˜¯å¥½ä¸œè¥¿ï¼Œæ¨èå¤§å®¶è´­ä¹°,",
+                    "$  çš„è´¨é‡çœŸçš„éå¸¸ä¸é”™ï¼",
+                    "$  çœŸæ˜¯å¤ªå¥½ç”¨äº†ï¼ŒçœŸæ˜¯ä¸ªå®è´ï¼Œéš¾å¿˜çš„å®è´!!",
+                    "$  çŸ­çŸ­å‡ å¤©çš„ä½“éªŒï¼Œä»¤äººä¸€ç”Ÿéš¾å¿˜",
+                    "$  ç”¨äº†è¿™ä¹ˆä¹…äº†ï¼Œå®ƒé•¿çš„çœŸæ˜¯å¤ªå¯çˆ±äº†",
+                    "è¿™å¯çœŸæ˜¯ä¸ªå°å®è´ï¼",
+                    "äº”æ˜Ÿå¥½è¯„ï¼Œå®‰æ’ä¸Šï¼Œå¤ªå¥½ç”¨æ‹‰ï¼ï¼ï¼"
                 ],
-                "½áÊø": [
-                    "ÍÆ¼ö´ó¼ÒÀ´³¢ÊÔ",
-                    "Õâ¼Òµê¸øÎÒ¶ÔÓÚ$ÄÜ×ö³ÉÕâÑùË¢ĞÂÁËÊÀ½ç¹Û!",
-                    "ÕæÊÇÒ»´ÎÓä¿ìµÄ¹ºÎï£¡",
-                    "ÒÔºóÂò$»¹À´Õâ¼Òµê£¬¾ÍÃ»¼û¹ıÕâÃ´ºÃÓÃµÄ¶«Î÷£¡",
-                    "ÏÂ´Î»¹À´Õâ¼ÒµêÂò $ £¬¾ÍÃ»¼û¹ıÕâÃ´Å£±ÆµÄ¶«Î÷",
-                    "¶«Î÷ºÜºÃ£¬º¢×ÓºÜÏ²»¶",
-                    "ÏÖÔÚË¯¾õ¶¼±§×Å  $  Ë¯¾õ£¬ÕæÊÇÌ«ºÃÓÃÁË",
-                    "ÁîÈËÄÑÍæµÄÒ»´Î¹ºÎï"
+                "ç»“æŸ": [
+                    "æ¨èå¤§å®¶æ¥å°è¯•",
+                    "è¿™å®¶åº—ç»™æˆ‘å¯¹äº$èƒ½åšæˆè¿™æ ·åˆ·æ–°äº†ä¸–ç•Œè§‚!",
+                    "çœŸæ˜¯ä¸€æ¬¡æ„‰å¿«çš„è´­ç‰©ï¼",
+                    "ä»¥åä¹°$è¿˜æ¥è¿™å®¶åº—ï¼Œå°±æ²¡è§è¿‡è¿™ä¹ˆå¥½ç”¨çš„ä¸œè¥¿ï¼",
+                    "ä¸‹æ¬¡è¿˜æ¥è¿™å®¶åº—ä¹° $ ï¼Œå°±æ²¡è§è¿‡è¿™ä¹ˆç‰›é€¼çš„ä¸œè¥¿",
+                    "ä¸œè¥¿å¾ˆå¥½ï¼Œå­©å­å¾ˆå–œæ¬¢",
+                    "ç°åœ¨ç¡è§‰éƒ½æŠ±ç€  $  ç¡è§‰ï¼ŒçœŸæ˜¯å¤ªå¥½ç”¨äº†",
+                    "ä»¤äººéš¾ç©çš„ä¸€æ¬¡è´­ç‰©"
                 ]
             }
         }
         if _type == 1:
-            # return 5, '¶«Î÷ºÜºÃ£¬º¢×ÓºÜÏ²»¶£¬Ã¿ÌìÍíÉÏ²»±§×ÅËé¾õ£¬¾ÍÍêÈ«Ë¯²»×Å¡£ÂòµÄÊ±ºò¿´¼ûÆÀÂÛÀï¶¼ËµºÃ¾ÍÂòÁË£¬¿´µ½·¢»õµÄÊ±ºòÍ¦¼¤¶¯µÄ£¬µ½ÁËÖ®ºó£¬Âú»³ÆÚ´ıÒ»¼¤¶¯µÃ´Ó¿ìµİÔ±ÄÇÀïÄÃ»ØÁËÇŞÊÒ£¬ÊÔÒ»ÏÂ£¬½á¹ûÍ¦²»´í°¡£¡¶øÇÒ¿Í·şĞ¡½ã½ãÒ²ÌØ±ğµÄºÃ£¬ºÜÓĞÀñÃ²£¬¿Í·şĞ¡½ã½ãÒ²ÊÇÃë»ØÎÒµÄÒÉÎÊÄØ£¬ÎûÎû£¬ÏÂ´Î»¹»á»Ø¹ºßÕ¡£'
+            # return 5, 'ä¸œè¥¿å¾ˆå¥½ï¼Œå­©å­å¾ˆå–œæ¬¢ï¼Œæ¯å¤©æ™šä¸Šä¸æŠ±ç€ç¢è§‰ï¼Œå°±å®Œå…¨ç¡ä¸ç€ã€‚ä¹°çš„æ—¶å€™çœ‹è§è¯„è®ºé‡Œéƒ½è¯´å¥½å°±ä¹°äº†ï¼Œçœ‹åˆ°å‘è´§çš„æ—¶å€™æŒºæ¿€åŠ¨çš„ï¼Œåˆ°äº†ä¹‹åï¼Œæ»¡æ€€æœŸå¾…ä¸€æ¿€åŠ¨å¾—ä»å¿«é€’å‘˜é‚£é‡Œæ‹¿å›äº†å¯å®¤ï¼Œè¯•ä¸€ä¸‹ï¼Œç»“æœæŒºä¸é”™å•Šï¼è€Œä¸”å®¢æœå°å§å§ä¹Ÿç‰¹åˆ«çš„å¥½ï¼Œå¾ˆæœ‰ç¤¼è²Œï¼Œå®¢æœå°å§å§ä¹Ÿæ˜¯ç§’å›æˆ‘çš„ç–‘é—®å‘¢ï¼Œå˜»å˜»ï¼Œä¸‹æ¬¡è¿˜ä¼šå›è´­å“’ã€‚'
             comments = datas[_type]
             return random.randint(3, 5), (
-                    random.choice(comments["¿ªÊ¼"]) + random.choice(comments["ÖĞ¼ä"]) + random.choice(
-                comments["½áÊø"])).replace(
+                    random.choice(comments["å¼€å§‹"]) + random.choice(comments["ä¸­é—´"]) + random.choice(
+                comments["ç»“æŸ"])).replace(
                 "$", name)
         elif _type == 0:
             comments = datas[_type]
             return (
-                    random.choice(comments["¿ªÊ¼"]) + random.choice(comments["ÖĞ¼ä"]) + random.choice(
-                comments["½áÊø"])).replace(
+                    random.choice(comments["å¼€å§‹"]) + random.choice(comments["ä¸­é—´"]) + random.choice(
+                comments["ç»“æŸ"])).replace(
                 "$", name)
 
 
-# ²éÑ¯È«²¿ÆÀ¼Û
+# æŸ¥è¯¢å…¨éƒ¨è¯„ä»·
 def all_evaluate():
     N = {}
     url = 'https://club.jd.com/myJdcomments/myJdcomment.action?'
@@ -119,22 +119,22 @@ def all_evaluate():
     return N
 
 
-# ÆÕÍ¨ÆÀ¼Û
+# æ™®é€šè¯„ä»·
 def ordinary(N):
     Order_data = []
     req_et = []
-    for i in range((N['´ıÆÀ¼Û¶©µ¥'] // 20) + 1):
+    for i in range((N['å¾…è¯„ä»·è®¢å•'] // 20) + 1):
         url = f'https://club.jd.com/myJdcomments/myJdcomment.action?sort=0&page={i + 1}'
         req = requests.get(url, headers=headers)
         req_et.append(etree.HTML(req.text))
     for i in req_et:
         Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tbody'))
-    if len(Order_data) != N['·şÎñÆÀ¼Û']:
+    if len(Order_data) != N['æœåŠ¡è¯„ä»·']:
         Order_data = []
         for i in req_et:
             Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table'))
 
-    print(f"µ±Ç°¹²ÓĞ{N['´ıÆÀ¼Û¶©µ¥']}¸öÆÀ¼Û¡£")
+    print(f"å½“å‰å…±æœ‰{N['å¾…è¯„ä»·è®¢å•']}ä¸ªè¯„ä»·ã€‚")
     for i, Order in enumerate(Order_data):
         oid = Order.xpath('tr[@class="tr-th"]/td/span[3]/a/text()')[0]
         oname = Order.xpath('tr[@class="tr-bd"]/td[1]/div[1]/div[2]/div/a/text()')[0]
@@ -142,40 +142,40 @@ def ordinary(N):
 
         pid = pid.replace('//item.jd.com/', '').replace('.html', '')
 
-        print(f"\t{i}.¿ªÊ¼ÆÀ¼Û¶©µ¥\t{oname}[{oid}]")
+        print(f"\t{i}.å¼€å§‹è¯„ä»·è®¢å•\t{oname}[{oid}]")
         url2 = f"https://club.jd.com/myJdcomments/saveProductComment.action"
         xing, Str = generation(oname)
-        print(f'\t\tÆÀ¼ÛÄÚÈİ,ĞÇ¼¶{xing}£º', Str)
+        print(f'\t\tè¯„ä»·å†…å®¹,æ˜Ÿçº§{xing}ï¼š', Str)
         data2 = {
             'orderId': oid,
-            'productId': pid,  # ÉÌÆ·id
-            'score': str(xing),  # ÉÌÆ·¼¸ĞÇ
-            'content': bytes(Str, encoding="gbk"),  # ÆÀ¼ÛÄÚÈİ
+            'productId': pid,  # å•†å“id
+            'score': str(xing),  # å•†å“å‡ æ˜Ÿ
+            'content': bytes(Str, encoding="gbk"),  # è¯„ä»·å†…å®¹
             'saveStatus': '1',
             'anonymousFlag': '1'
         }
         pj2 = requests.post(url2, headers=headers, data=data2)
         time.sleep(5)
-        N['´ıÆÀ¼Û¶©µ¥'] -= 1
+        N['å¾…è¯„ä»·è®¢å•'] -= 1
     return N
 
 
-# É¹µ¥ÆÀ¼Û
+# æ™’å•è¯„ä»·
 def sunbw(N):
     Order_data = []
-    for i in range((N['´ıÉ¹µ¥'] // 20) + 1):
+    for i in range((N['å¾…æ™’å•'] // 20) + 1):
         url = f"https://club.jd.com/myJdcomments/myJdcomment.action?sort=1&page={i + 1}"
         req = requests.get(url, headers=headers)
         req_et = etree.HTML(req.text)
         Order_data.extend(req_et.xpath('//*[@id="evalu01"]/div[2]/div[1]/div[@class="comt-plist"]/div[1]'))
-    print(f"µ±Ç°¹²ÓĞ{N['´ıÉ¹µ¥']}¸öĞèÒªÉ¹µ¥¡£")
+    print(f"å½“å‰å…±æœ‰{N['å¾…æ™’å•']}ä¸ªéœ€è¦æ™’å•ã€‚")
     for i, Order in enumerate(Order_data):
         oname = Order.xpath('ul/li[1]/div/div[2]/div[1]/a/text()')[0]
         pid = Order.xpath('@pid')[0]
         oid = Order.xpath('@oid')[0]
 
-        print(f'\t¿ªÊ¼É¹µ¥{i},{oname}')
-        # »ñÈ¡Í¼Æ¬
+        print(f'\tå¼€å§‹æ™’å•{i},{oname}')
+        # è·å–å›¾ç‰‡
         pname = generation(pname=oname, _class=1)
         url1 = f"https://club.jd.com/discussion/getProductPageImageCommentList.action?productId={pid}"
         imgdata = requests.get(url1, headers=headers).json()
@@ -185,8 +185,8 @@ def sunbw(N):
         imgurl = imgdata["imgComments"]["imgList"][0]["imageUrl"]
 
         #
-        print(f'\t\tÍ¼Æ¬url={imgurl}')
-        url2 = "https://club.jd.com/myJdcomments/saveShowOrder.action"  # Ìá½»É¹µ¥
+        print(f'\t\tå›¾ç‰‡url={imgurl}')
+        url2 = "https://club.jd.com/myJdcomments/saveShowOrder.action"  # æäº¤æ™’å•
         headers['Referer'] = 'https://club.jd.com/myJdcomments/myJdcomment.action?sort=1'
         headers['Origin'] = 'https://club.jd.com'
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -203,37 +203,37 @@ def sunbw(N):
             'saveStatus': 3
         }, headers=headers)
         # print(f'\t\t\t{req_url2.text}')
-        print('Íê³É')
+        print('å®Œæˆ')
         time.sleep(5)
-        N['´ıÉ¹µ¥'] -= 1
+        N['å¾…æ™’å•'] -= 1
     return N
 
 
-# ×·ÆÀ
+# è¿½è¯„
 def review(N):
     req_et = []
     Order_data = []
-    for i in range((N['´ı×·ÆÀ'] // 20) + 1):
+    for i in range((N['å¾…è¿½è¯„'] // 20) + 1):
         url = f"https://club.jd.com/myJdcomments/myJdcomment.action?sort=3&page={i + 1}"
         req = requests.get(url, headers=headers)
         req_et.append(etree.HTML(req.text))
     for i in req_et:
         Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tr[@class="tr-bd"]'))
-    if len(Order_data) != N['´ı×·ÆÀ']:
+    if len(Order_data) != N['å¾…è¿½è¯„']:
         Order_data = []
         for i in req_et:
             Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tbody/tr[@class="tr-bd"]'))
 
-    print(f"µ±Ç°¹²ÓĞ{N['´ı×·ÆÀ']}¸öĞèÒª×·ÆÀ¡£")
+    print(f"å½“å‰å…±æœ‰{N['å¾…è¿½è¯„']}ä¸ªéœ€è¦è¿½è¯„ã€‚")
     for i, Order in enumerate(Order_data):
         oname = Order.xpath('td[1]/div/div[2]/div/a/text()')[0]
         _id = Order.xpath('td[3]/div/a/@href')[0]
         # date = Order.xpath('td[2]/div/text()')[0]
-        print(f'\t¿ªÊ¼µÚ{i}£¬{oname}')
+        print(f'\tå¼€å§‹ç¬¬{i}ï¼Œ{oname}')
         url1 = "https://club.jd.com/afterComments/saveAfterCommentAndShowOrder.action"
         pid, oid = _id.replace('http://club.jd.com/afterComments/productPublish.action?sku=', "").split('&orderId=')
         context = generation(oname, _type=0)
-        print(f'\t\t×·ÆÀÄÚÈİ£º{context}')
+        print(f'\t\tè¿½è¯„å†…å®¹ï¼š{context}')
         req_url1 = requests.post(url1, headers=headers, data={
             'orderId': oid,
             'productId': pid,
@@ -242,31 +242,31 @@ def review(N):
             'score': 5
         })
         # print(f'\t\t\tr{req_url1.text}')
-        print('Íê³É')
+        print('å®Œæˆ')
         time.sleep(5)
-        N['´ı×·ÆÀ'] -= 1
+        N['å¾…è¿½è¯„'] -= 1
     return N
 
 
-# ·şÎñÆÀ¼Û
+# æœåŠ¡è¯„ä»·
 def Service_rating(N):
     Order_data = []
     req_et = []
-    for i in range((N['·şÎñÆÀ¼Û'] // 20) + 1):
+    for i in range((N['æœåŠ¡è¯„ä»·'] // 20) + 1):
         url = f"https://club.jd.com/myJdcomments/myJdcomment.action?sort=4&page={i + 1}"
         req = requests.get(url, headers=headers)
         req_et.append(etree.HTML(req.text))
     for i in req_et:
         Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tbody/tr[@class="tr-bd"]'))
-    if len(Order_data) != N['·şÎñÆÀ¼Û']:
+    if len(Order_data) != N['æœåŠ¡è¯„ä»·']:
         Order_data = []
         for i in req_et:
             Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tr[@class="tr-bd"]'))
-    print(f"µ±Ç°¹²ÓĞ{N['·şÎñÆÀ¼Û']}¸öĞèÒª·şÎñÆÀ¼Û¡£")
+    print(f"å½“å‰å…±æœ‰{N['æœåŠ¡è¯„ä»·']}ä¸ªéœ€è¦æœåŠ¡è¯„ä»·ã€‚")
     for i, Order in enumerate(Order_data):
         oname = Order.xpath('td[1]/div[1]/div[2]/div/a/text()')[0]
         oid = Order.xpath('td[4]/div/a[1]/@oid')[0]
-        print(f'\t¿ªÊ¼µÚ{i}£¬{oname}')
+        print(f'\tå¼€å§‹ç¬¬{i}ï¼Œ{oname}')
         url1 = f'https://club.jd.com/myJdcomments/insertRestSurvey.action?voteid=145&ruleid={oid}'
         data1 = {
             'oid': oid,
@@ -274,16 +274,16 @@ def Service_rating(N):
             'sid': '186194',
             'stid': '0',
             'tags': '',
-            'ro591': f'591A{random.randint(3, 5)}',  # ÉÌÆ··ûºÏ¶È
-            'ro592': f'592A{random.randint(3, 5)}',  # µê¼Ò·şÎñÌ¬¶È
-            'ro593': f'593A{random.randint(3, 5)}',  # ¿ìµİÅäËÍËÙ¶È
-            'ro899': f'899A{random.randint(3, 5)}',  # ¿ìµİÔ±·şÎñ
-            'ro900': f'900A{random.randint(3, 5)}'  # ¿ìµİÔ±·şÎñ
+            'ro591': f'591A{random.randint(3, 5)}',  # å•†å“ç¬¦åˆåº¦
+            'ro592': f'592A{random.randint(3, 5)}',  # åº—å®¶æœåŠ¡æ€åº¦
+            'ro593': f'593A{random.randint(3, 5)}',  # å¿«é€’é…é€é€Ÿåº¦
+            'ro899': f'899A{random.randint(3, 5)}',  # å¿«é€’å‘˜æœåŠ¡
+            'ro900': f'900A{random.randint(3, 5)}'  # å¿«é€’å‘˜æœåŠ¡
         }
         pj1 = requests.post(url1, headers=headers, data=data1)
         print("\t\t", pj1.text)
         time.sleep(5)
-        N['·şÎñÆÀ¼Û'] -= 1
+        N['æœåŠ¡è¯„ä»·'] -= 1
     return N
 
 
@@ -297,28 +297,28 @@ def No():
 
 
 def main():
-    print("¿ªÊ¼¾©¶«ÅúÁ¿ÆÀ¼Û£¡\n")
+    print("å¼€å§‹äº¬ä¸œæ‰¹é‡è¯„ä»·ï¼\n")
     N = No()
     if not N:
-        print('Ck³öÏÖ´íÎó£¬ÇëÖØĞÂ×¥È¡£¡')
+        print('Ckå‡ºç°é”™è¯¯ï¼Œè¯·é‡æ–°æŠ“å–ï¼')
         exit()
-    if N['´ıÆÀ¼Û¶©µ¥'] != 0:
-        print("1.¿ªÊ¼ÆÕÍ¨ÆÀ¼Û")
+    if N['å¾…è¯„ä»·è®¢å•'] != 0:
+        print("1.å¼€å§‹æ™®é€šè¯„ä»·")
         N = ordinary(N)
         N = No()
-    if N['´ıÉ¹µ¥'] != 0:
-        print("2.¿ªÊ¼É¹µ¥ÆÀ¼Û")
+    if N['å¾…æ™’å•'] != 0:
+        print("2.å¼€å§‹æ™’å•è¯„ä»·")
         N = sunbw(N)
         N = No()
-    if N['´ı×·ÆÀ'] != 0:
-        print("3.¿ªÊ¼ÅúÁ¿×·ÆÀ£¡")
+    if N['å¾…è¿½è¯„'] != 0:
+        print("3.å¼€å§‹æ‰¹é‡è¿½è¯„ï¼")
         N = review(N)
         N = No()
-    if N['·şÎñÆÀ¼Û'] != 0:
-        print('4.¿ªÊ¼·şÎñÆÀ¼Û')
+    if N['æœåŠ¡è¯„ä»·'] != 0:
+        print('4.å¼€å§‹æœåŠ¡è¯„ä»·')
         N = Service_rating(N)
         N = No()
-    print("È«²¿Íê³ÉÀ²£¡")
+    print("å…¨éƒ¨å®Œæˆå•¦ï¼")
 
 
 if __name__ == '__main__':
