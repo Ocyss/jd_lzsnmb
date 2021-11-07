@@ -20,6 +20,7 @@ Ev_img = ''
 
 import os, random, re, sys, time
 from urllib.parse import unquote
+# noinspection PyUnresolvedReferences
 from sendNotify import send
 
 try:
