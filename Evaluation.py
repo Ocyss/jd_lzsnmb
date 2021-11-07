@@ -1,6 +1,5 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# 京东自动评价
 '''
 项目名称: JD-Script / jd_Evaluation
 Author: qiu_lzsnmb
@@ -21,7 +20,6 @@ Ev_img = ''
 
 import os, random, re, sys, time
 from urllib.parse import unquote
-# noinspection PyUnresolvedReferences
 from sendNotify import send
 
 try:
@@ -216,7 +214,6 @@ class getJDCookie(object):
 getCk = getJDCookie()
 getCk.getCookie()
 # 获取v4环境 特殊处理
-# noinspection PyUnboundLocalVariable
 if os.path.exists(v4f):
     try:
         with open(v4f, 'r', encoding='utf-8') as f:
