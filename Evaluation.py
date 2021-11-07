@@ -431,7 +431,7 @@ def start():
                     printf("\t服务评价失败了.......")
                     printf(se_data)
 
-            printf(f'开始评论{i}\t[{da["oid"]}')
+            printf(f'开始评论{i}\t[{da["oid"]}]')
 
             if da['cname'] == "评价晒单":
                 pjsj()
@@ -452,7 +452,7 @@ def start():
         for i, da in enumerate(op(headers, _type=False)):
             if da['cname'] == "追加评价":
                 context = generation(da['name'], _type=0)
-                printf(f'开始晒单{i},{da["oid"]}')
+                printf(f'开始晒单{i}\t[{da["oid"]}]')
                 if da['multi']:
                     # printf('\t多个商品跳过！')
                     continue
@@ -484,7 +484,7 @@ def start():
     for i, ck, user, pin in zip(range(1, len(cookiesList) + 1), cookiesList, userNameList, pinNameList):
         if i not in Scope:
             continue
-        printf(f"** 开始[账号{i}]-{user} **")
+        printf(f"\n\n** 开始[账号{i}]-{user} **")
         headers = {
             'cookie': ck,
             'user-agent': 'jdltapp;android;1.0.0;9;860105045422157-bce2658d9db5;network/wifi;model/JKM-AL00a;addressid/0;aid/5d84f5872ec4e5c8;oaid/51fe75e7-7e5d-aefc-fbed-ffffdf7f6bd2;osVer/28;appBuild/694;psn/860105045422157-bce2658d9db5|3;psq/26;uid/860105045422157-bce2658d9db5;adk/;ads/;pap/JA2020_3112531|1.0.0|ANDROID',
@@ -492,9 +492,11 @@ def start():
         Cent[f'账号{i}[{user}]'] = {'评价': 0, '晒单': 0, '服务评价': 0}
         printf('开始评价与服务评价！')
         ordinary(headers, f'账号{i}[{user}]')
+        printf('评价与服务完成！！\n')
+
         printf('开始晒单！')
         sunbw(headers, f'账号{i}[{user}]')
-        printf('完成！！。等待10秒')
+        printf('晒单完成！！。等待10秒开始下一个账号\n')
         time.sleep(10)
     msg = ''
     for i in Cent:
