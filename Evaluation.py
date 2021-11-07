@@ -16,6 +16,8 @@ Ev_Scope = ''
 # 晒单图片更换 ，默认两张裂图随机 ENV设置： export Ev_img='//img30.360buyimg.com/shaidan/······.jpg'
 Ev_img = ''
 
+# 评价星级，评论是好评，星级默认4-5随机。只支持逗号 ENV设置： export Ev_xing='4,5'
+Ev_xing = '4,5'
 ###############################################
 
 import os, random, re, sys, time
@@ -75,6 +77,37 @@ if "Ev_img" in os.environ:
     if len(os.environ["Ev_img"]) > 1:
         blueCoin_Cc = getEnvs(os.environ["Ev_img"])
         printf(f"已获取并使用Env环境 Ev_img:{Ev_img}")
+
+if "Ev_xing" in os.environ:
+    if len(os.environ["Ev_xing"]) > 1:
+        blueCoin_Cc = getEnvs(os.environ["Ev_xing"])
+        printf(f"已获取并使用Env环境 Ev_xing:{Ev_xing}")
+
+try:
+    xing = []
+    for i in Ev_xing.split(','):
+        xing.append(i)
+except ValueError:
+    print('星级参数设置错误')
+    exit(3)
+
+Scope = []
+
+# 范围配置！！
+try:
+    if Ev_Scope == '':
+        Scope = [1, 2, 3]
+    else:
+        for Sco in Ev_Scope:
+            if '-' in Sco:
+                b = Sco.split('-')
+                for x in range(int(b[0]), int(b[1]) + 1):
+                    Scope.append(x)
+            else:
+                Scope.append(int(Sco))
+except ValueError:
+    print('当前Ev_Scope出错，程序终止！')
+    exit(3)
 
 
 class getJDCookie(object):
@@ -310,7 +343,7 @@ def generation(pname, _class=0, _type=1):
         if _type == 1:
             # return 5, '东西很好，孩子很喜欢，每天晚上不抱着碎觉，就完全睡不着。买的时候看见评论里都说好就买了，看到发货的时候挺激动的，到了之后，满怀期待一激动得从快递员那里拿回了寝室，试一下，结果挺不错啊！而且客服小姐姐也特别的好，很有礼貌，客服小姐姐也是秒回我的疑问呢，嘻嘻，下次还会回购哒。'
             comments = datas[_type]
-            return random.randint(3, 5), (
+            return (
                     random.choice(comments["开始"]) + random.choice(comments["中间"]) + random.choice(comments["结束"])).replace("$", name)
         elif _type == 0:
             comments = datas[_type]
@@ -368,11 +401,11 @@ def start():
                 'g_login_type': '0',
                 'g_ty': 'ls'
             }
-            xing, context = generation(da['name'])
+            context = generation(da['name'])
             data = {
                 'productId': da['pid'],
                 'orderId': da['oid'],
-                'score': xing,
+                'score': int(random.choice(xing)),
                 'content': context,
                 'commentTagStr': 1,
                 'userclient': 29,
@@ -447,23 +480,6 @@ def start():
     printf('### 开始批量评价 ###')
     global cookiesList, userNameList, pinNameList, ckNum, beanCount, userCount
     cookiesList, userNameList, pinNameList = getCk.iscookie()
-    Scope = []
-
-    # 范围配置！！
-    try:
-        if Ev_Scope == '':
-            Scope = [1, 2, 3]
-        else:
-            for Sco in Ev_Scope:
-                if '-' in Sco:
-                    b = Sco.split('-')
-                    for x in range(int(b[0]), int(b[1]) + 1):
-                        Scope.append(x)
-                else:
-                    Scope.append(int(Sco))
-    except ValueError:
-        print('当前Ev_Scope出错，程序终止！')
-        exit(3)
 
     for i, ck, user, pin in zip(range(1, len(cookiesList) + 1), cookiesList, userNameList, pinNameList):
         if i not in Scope:
