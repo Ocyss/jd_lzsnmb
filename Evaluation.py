@@ -468,14 +468,18 @@ def start():
                     'imageJson': Ev_img
                 }
                 req = requests.post(url, headers=headers, data=data)
-                if req.json()['data']['result'] != {}:
-                    # printf("\t晒单成功！！！")
-                    Cent[ce]['晒单'] += 1
-                else:
-                    printf("\t晒单失败...")
-                    printf(req.json())
-                # printf('等待5秒-可持续发展！')
-                time.sleep(5)
+                try:
+                    if req.json()['data']['result'] != {}:
+                        # printf("\t晒单成功！！！")
+                        Cent[ce]['晒单'] += 1
+                    else:
+                        printf("\t晒单失败...")
+                        printf(req.json())
+                    # printf('等待5秒-可持续发展！')
+                    time.sleep(20)
+                except KeyError:
+                    printf(f'当前无数据！返回，可能被风控，返回的数据：{req.json()}')
+                    return
 
     printf('### 开始批量评价 ###')
     global cookiesList, userNameList, pinNameList, ckNum, beanCount, userCount
