@@ -7,6 +7,9 @@ import requests
 from lxml import etree
 
 jieba.setLogLevel(jieba.logging.INFO)
+"""
+ck填到下面就好，只支持网页版的Ck
+"""
 ck = ''
 
 headers = {
