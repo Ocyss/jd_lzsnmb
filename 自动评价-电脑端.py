@@ -9,8 +9,9 @@ from lxml import etree
 jieba.setLogLevel(jieba.logging.INFO)
 """
 ck填到下面就好，只支持网页版的Ck
+以下为最短格式
 """
-ck = ''
+ck = 'thor=; pin=;'
 
 headers = {
     'cookie': ck,
@@ -93,14 +94,12 @@ def generation(pname, _class=0, _type=1):
             # return 5, '东西很好，孩子很喜欢，每天晚上不抱着碎觉，就完全睡不着。买的时候看见评论里都说好就买了，看到发货的时候挺激动的，到了之后，满怀期待一激动得从快递员那里拿回了寝室，试一下，结果挺不错啊！而且客服小姐姐也特别的好，很有礼貌，客服小姐姐也是秒回我的疑问呢，嘻嘻，下次还会回购哒。'
             comments = datas[_type]
             return random.randint(3, 5), (
-                    random.choice(comments["开始"]) + random.choice(comments["中间"]) + random.choice(
-                comments["结束"])).replace(
+                    random.choice(comments["开始"]) + random.choice(comments["中间"]) + random.choice(comments["结束"])).replace(
                 "$", name)
         elif _type == 0:
             comments = datas[_type]
             return (
-                    random.choice(comments["开始"]) + random.choice(comments["中间"]) + random.choice(
-                comments["结束"])).replace(
+                    random.choice(comments["开始"]) + random.choice(comments["中间"]) + random.choice(comments["结束"])).replace(
                 "$", name)
 
 
@@ -132,7 +131,7 @@ def ordinary(N):
         req_et.append(etree.HTML(req.text))
     for i in req_et:
         Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tbody'))
-    if len(Order_data) != N['服务评价']:
+    if len(Order_data) != N['待评价订单']:
         Order_data = []
         for i in req_et:
             Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table'))
@@ -140,26 +139,26 @@ def ordinary(N):
     print(f"当前共有{N['待评价订单']}个评价。")
     for i, Order in enumerate(Order_data):
         oid = Order.xpath('tr[@class="tr-th"]/td/span[3]/a/text()')[0]
-        oname = Order.xpath('tr[@class="tr-bd"]/td[1]/div[1]/div[2]/div/a/text()')[0]
-        pid = Order.xpath('tr[@class="tr-bd"]/td[1]/div[1]/div[2]/div/a/@href')[0]
+        oname_data = Order.xpath('tr[@class="tr-bd"]/td[1]/div[1]/div[2]/div/a/text()')
+        pid_data = Order.xpath('tr[@class="tr-bd"]/td[1]/div[1]/div[2]/div/a/@href')
+        for oname, pid in zip(oname_data, pid_data):
+            pid = pid.replace('//item.jd.com/', '').replace('.html', '')
 
-        pid = pid.replace('//item.jd.com/', '').replace('.html', '')
-
-        print(f"\t{i}.开始评价订单\t{oname}[{oid}]")
-        url2 = f"https://club.jd.com/myJdcomments/saveProductComment.action"
-        xing, Str = generation(oname)
-        print(f'\t\t评价内容,星级{xing}：', Str)
-        data2 = {
-            'orderId': oid,
-            'productId': pid,  # 商品id
-            'score': str(xing),  # 商品几星
-            'content': bytes(Str, encoding="gbk"),  # 评价内容
-            'saveStatus': '1',
-            'anonymousFlag': '1'
-        }
-        pj2 = requests.post(url2, headers=headers, data=data2)
-        time.sleep(5)
-        N['待评价订单'] -= 1
+            print(f"\t{i}.开始评价订单\t{oname}[{oid}]")
+            url2 = f"https://club.jd.com/myJdcomments/saveProductComment.action"
+            xing, Str = generation(oname)
+            print(f'\t\t评价内容,星级{xing}：', Str)
+            data2 = {
+                'orderId': oid,
+                'productId': pid,  # 商品id
+                'score': str(xing),  # 商品几星
+                'content': bytes(Str, encoding="gbk"),  # 评价内容
+                'saveStatus': '1',
+                'anonymousFlag': '1'
+            }
+            pj2 = requests.post(url2, headers=headers, data=data2)
+            time.sleep(2)
+    N['待评价订单'] -= 1
     return N
 
 
@@ -223,10 +222,8 @@ def review(N):
     for i in req_et:
         Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tr[@class="tr-bd"]'))
     if len(Order_data) != N['待追评']:
-        Order_data = []
         for i in req_et:
             Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tbody/tr[@class="tr-bd"]'))
-
     print(f"当前共有{N['待追评']}个需要追评。")
     for i, Order in enumerate(Order_data):
         oname = Order.xpath('td[1]/div/div[2]/div/a/text()')[0]
@@ -246,7 +243,7 @@ def review(N):
         })
         # print(f'\t\t\tr{req_url1.text}')
         print('完成')
-        time.sleep(5)
+        time.sleep(2)
         N['待追评'] -= 1
     return N
 
@@ -300,7 +297,7 @@ def No():
 
 
 def main():
-    print("开始京东批量评价！\n")
+    print("开始京东批量评价！")
     N = No()
     if not N:
         print('Ck出现错误，请重新抓取！')
@@ -322,7 +319,14 @@ def main():
         N = Service_rating(N)
         N = No()
     print("全部完成啦！")
+    for i in N:
+        if N[i] != 0:
+            print("出现了二次错误，跳过了部分，重新尝试")
+            main()
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except RecursionError:
+        print("多次出现未完成情况，程序自动退出")
