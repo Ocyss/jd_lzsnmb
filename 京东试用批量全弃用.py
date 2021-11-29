@@ -18,7 +18,7 @@ headers = {
     'Referer': 'https://try.jd.com/user/myTrial?page=1&selected=2'
 }
 
-# for i in range(1, int(input("请输入要弃用到第几页： ")) + 1):
+# for i in range(1, int(input("请输入要弃用到第几页：  ")) + 1):
 for i in range(1, 4):
     url = f'https://try.jd.com/user/myTrial?page={i}&selected=2'
     req = requests.get(url, headers=headers)

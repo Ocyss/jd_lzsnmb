@@ -259,7 +259,6 @@ def Service_rating(N):
     for i in req_et:
         Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tbody/tr[@class="tr-bd"]'))
     if len(Order_data) != N['服务评价']:
-        Order_data = []
         for i in req_et:
             Order_data.extend(i.xpath('//*[@id="main"]/div[2]/div[2]/table/tr[@class="tr-bd"]'))
     print(f"当前共有{N['服务评价']}个需要服务评价。")
