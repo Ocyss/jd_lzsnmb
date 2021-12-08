@@ -11,8 +11,8 @@ jieba.setLogLevel(jieba.logging.INFO)
 ck填到下面就好，只支持网页版的Ck
 以下为最短格式
 """
-ck = 'thor=; pin=;'
-
+# ck = 'thor=; pin=;'
+ck = input("ck: ")
 headers = {
     'cookie': ck,
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
@@ -315,7 +315,10 @@ def main():
         N = No()
     if N['服务评价'] != 0:
         print('4.开始服务评价')
-        N = Service_rating(N)
+        try:
+            N = Service_rating(N)
+        except:
+            print("有京东快递评价，懒的修复,报错了，就重新在运行一次..................")
         N = No()
     print("全部完成啦！")
     for i in N:
