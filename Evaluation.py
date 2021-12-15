@@ -98,7 +98,7 @@ try:
     if Ev_Scope == '':
         Scope = [1, 2, 3]
     else:
-        for Sco in Ev_Scope:
+        for Sco in Ev_Scope.split(','):
             if '-' in Sco:
                 b = Sco.split('-')
                 for x in range(int(b[0]), int(b[1]) + 1):
