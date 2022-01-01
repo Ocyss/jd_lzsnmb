@@ -534,15 +534,6 @@ def start():
                     printf(f'当前无数据！返回，可能被风控，返回的数据：{req.json()}')
                     return
 
-        # printf('### 开始批量评价 ###')
-        # global cookiesList, userNameList, pinNameList, ckNum, beanCount, userCount
-        # cookiesList, userNameList, pinNameList = getCk.iscookie()
-
-        # for i, ck, user, pin in zip(range(1, len(cookiesList) + 1), cookiesList, userNameList, pinNameList):
-        #     if i not in Scope:
-        #         continue
-        #     printf(f"\n\n** 开始[账号{i}]-{user} **")
-
     printf('### 开始批量评价 ###')
     global cookiesList, userNameList, pinNameList, ckNum, beanCount, userCount
     cookiesList, userNameList, pinNameList = getCk.iscookie()
