@@ -20,8 +20,13 @@ Ev_img = ''
 Ev_xing = '4,5'
 ###############################################
 
-import os, random, re, sys, time
+import os
+import random
+import re
+import sys
+import time
 from urllib.parse import unquote
+
 # noinspection PyUnresolvedReferences
 from sendNotify import send
 
@@ -356,29 +361,56 @@ def start():
 
     def op(headers, _type=True):
         Ci = []
-        url = 'https://wq.jd.com/bases/orderlist/list?order_type=8&start_page=1&page_size=100'
         if not _type:
             url = 'https://wq.jd.com/bases/orderlist/list?order_type=6&start_page=1&page_size=10'
         he = headers
         he['referer'] = 'https://wqs.jd.com/order/orderlist_merge.shtml?jxsid=16355625882984298965&orderType=all&ptag=7155.1.11'
         # try:
         if True:
-            req = requests.get(url, headers=he)
-            data = req.json()
-            for i, da in enumerate(data['orderList']):
-                oid = da['orderId']
-                pid = da['productList'][0]['skuId']
-                name = da['productList'][0]['title']
-                cname = None
-                multi = False if len(da['productList']) == 1 else True
-                for j in da['buttonList']:
-                    if j['id'] == 'toComment':
-                        cname = j['name']  # 评价按钮名字
-                if cname is None:
-                    # printf("没获得到按钮数据，跳过这个商品！")
-                    continue
+            page = 1
+            judgmentAndEvaluation = 0  # 判断是否评价完成
+            OUT = True
+            while OUT:
+                req = requests.get(f'https://wq.jd.com/bases/orderlist/list?order_type=6&start_page={page}&last_page=0&page_size=10', headers=he)
+                data = req.json()
+                for i, da in enumerate(data['orderList']):
+                    oid = da['orderId']
+                    if len(da['productList']) == 1:  # 单订单
+                        pid = da['productList'][0]['skuId']
+                        name = da['productList'][0]['title']
+                        cname = None
+                        for j in da['buttonList']:
+                            if j['id'] == 'toComment':
+                                cname = j['name']  # 评价按钮名字
+                        if cname is None:
+                            # printf("没获得到按钮数据，跳过这个商品！")
+                            continue
+                        elif cname == '查看评价':
+                            judgmentAndEvaluation += 1
+                            if judgmentAndEvaluation == 20:
+                                OUT = False
+                            continue
+                        else:
+                            judgmentAndEvaluation = 0
+                        Ci.append({'name': name, 'oid': oid, 'pid': pid, 'cname': cname, 'multi': False})
+                    else:
+                        # 针对多订单的处理
+                        odd_url = 'https://api.m.jd.com/api?body={"orderId":"%s"}&appid=jd-cphdeveloper-m&functionId=getEvalPage' % oid
+                        odd_req = requests.get(odd_url, headers=he)
+                        odd_data = odd_req.json()
+                        for odd_da in odd_data['data']['jingdong_club_voucherbyorderid_get_response']['userCommentVoList']:
+                            pid = odd_da['productId']
+                            name = odd_da['productSolrInfo']['fullName']
+                            after = odd_da['afterDiscussionStatus']
+                            append = odd_da['append']
+                            cname = "评价晒单" if after == 0 else "追加评价" if append == 1 else "查看评价"
+                            if cname == "查看评价":
+                                continue
+                            Ci.append({'name': name, 'oid': oid, 'pid': pid, 'cname': cname, 'multi': True})
+                # break
 
-                Ci.append({'name': name, 'oid': oid, 'pid': pid, 'cname': cname, 'multi': multi})
+                page += 1
+            # exit()
         # except:
         #     printf('获取评价出错，可能ck失效')
         #     exit()
@@ -386,43 +418,48 @@ def start():
 
     # 评价和服务评价
     def ordinary(headers, ce):
+        """
+
+        :param headers: 验证头
+        :param ce: 用户信息
+        :return:
+        """
         url = "https://wq.jd.com/eval/SendEval?g_login_type=0&g_ty=ajax"
         for i, da in enumerate(op(headers)):
-            se_url = f'https://wq.jd.com/eval/SendDSR'
-            se_data = {
-                # 'pin': '%E9%82%B1%E5%B8%85%E7%9A%AE%E7%9A%AE%E8%99%BE',
-                'userclient': '29',
-                'orderId': da["oid"],
-                'otype': random.randint(3, 5),
-                'DSR1': random.randint(3, 5),
-                'DSR2': random.randint(3, 5),
-                'DSR3': random.randint(3, 5),
-                'DSR4': random.randint(3, 5),
-                'g_login_type': '0',
-                'g_ty': 'ls'
-            }
-            context = generation(da['name'])
-            data = {
-                'productId': da['pid'],
-                'orderId': da['oid'],
-                'score': int(random.choice(xing)),
-                'content': context,
-                'commentTagStr': 1,
-                'userclient': 29,
-                'scence': 101100000
-            }
             he = headers
 
             def pjsj():
+                data = {
+                    'productId': da['pid'],
+                    'orderId': da['oid'],
+                    'score': int(random.choice(xing)),
+                    'content': generation(da['name']),
+                    'commentTagStr': 1,
+                    'userclient': 29,
+                    'scence': 101100000
+                }
                 req = requests.post(url, headers=he, data=data)
                 if req.json()['errMsg'] == 'success':
                     # printf("\t普通评价成功！！")
                     Cent[ce]['评价'] += 1
                 else:
                     printf("\t普通评价失败了.......")
+                    printf(req.json())
                     printf(data)
 
             def pjfw():
+                se_url = f'https://wq.jd.com/eval/SendDSR'
+                se_data = {
+                    'userclient': '29',
+                    'orderId': da["oid"],
+                    'otype': random.randint(3, 5),
+                    'DSR1': random.randint(3, 5),
+                    'DSR2': random.randint(3, 5),
+                    'DSR3': random.randint(3, 5),
+                    'DSR4': random.randint(3, 5),
+                    'g_login_type': '0',
+                    'g_ty': 'ls'
+                }
                 se_req = requests.get(se_url, headers=he, params=se_data)
                 if se_req.json()['errMsg'] == 'success':
                     # printf("\t服务评价成功！！")
@@ -431,7 +468,23 @@ def start():
                     printf("\t服务评价失败了.......")
                     printf(se_data)
 
-            printf(f'开始评论{i}\t[{da["oid"]}]')
+            def zjpj():
+                zj_url = 'https://wq.jd.com/eval/AppendComment?appid=jd-cphdeveloper-m&functionId=appendComment'
+                zj_data = {
+                    "productId": da['pid'],
+                    "orderId": da['oid'],
+                    "content": generation(da['name'], _type=0),
+                    'userclient': 29
+                }
+                zj_req = requests.post(zj_url, headers=he, data=zj_data)
+                if zj_req.json()['errMsg'] == 'success':
+                    # printf("\t追加评价成功！！")
+                    Cent[ce]['追加评价'] += 1
+                else:
+                    printf("\t追加评价失败了.......")
+                    printf(zj_data)
+
+            printf(f'开始评论{i}[当前类型：{da["cname"]}]\t[{da["oid"]}]')
 
             if da['cname'] == "评价晒单":
                 pjsj()
@@ -439,7 +492,7 @@ def start():
             elif da['cname'] == '评价服务':
                 pjfw()
             elif da['cname'] == '追加评价':
-                pass
+                zjpj()
             else:
                 printf(da['cname'])
             # printf('等待5秒-可持续发展！')
@@ -481,6 +534,15 @@ def start():
                     printf(f'当前无数据！返回，可能被风控，返回的数据：{req.json()}')
                     return
 
+        # printf('### 开始批量评价 ###')
+        # global cookiesList, userNameList, pinNameList, ckNum, beanCount, userCount
+        # cookiesList, userNameList, pinNameList = getCk.iscookie()
+
+        # for i, ck, user, pin in zip(range(1, len(cookiesList) + 1), cookiesList, userNameList, pinNameList):
+        #     if i not in Scope:
+        #         continue
+        #     printf(f"\n\n** 开始[账号{i}]-{user} **")
+
     printf('### 开始批量评价 ###')
     global cookiesList, userNameList, pinNameList, ckNum, beanCount, userCount
     cookiesList, userNameList, pinNameList = getCk.iscookie()
@@ -493,7 +555,7 @@ def start():
             'cookie': ck,
             'user-agent': 'jdltapp;android;1.0.0;9;860105045422157-bce2658d9db5;network/wifi;model/JKM-AL00a;addressid/0;aid/5d84f5872ec4e5c8;oaid/51fe75e7-7e5d-aefc-fbed-ffffdf7f6bd2;osVer/28;appBuild/694;psn/860105045422157-bce2658d9db5|3;psq/26;uid/860105045422157-bce2658d9db5;adk/;ads/;pap/JA2020_3112531|1.0.0|ANDROID',
         }
-        Cent[f'账号{i}[{user}]'] = {'评价': 0, '晒单': 0, '服务评价': 0}
+        Cent[f'账号{i}[{user}]'] = {'评价': 0, '晒单': 0, '服务评价': 0, '追加评价': 0}
         printf('开始评价与服务评价！')
         ordinary(headers, f'账号{i}[{user}]')
         printf('评价与服务完成！！\n')
@@ -502,10 +564,12 @@ def start():
         sunbw(headers, f'账号{i}[{user}]')
         printf('晒单完成！！。等待10秒开始下一个账号\n')
         time.sleep(10)
+
     msg = ''
     for i in Cent:
         msg += f'{i}\n{Cent[i]}\n\n'
     send('京东全自动评价', msg)
+    # print('京东全自动评价', msg)
 
 
 if __name__ == '__main__':
