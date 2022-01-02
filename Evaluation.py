@@ -11,6 +11,8 @@ new Env('京东全自动评价');
 ################【参数】######################
 # [填写您要批量评价的范围]  ENV设置： export Ev_Scope='1,2,4-5'
 #  目前只支持逗号(,)和减号(-),默认只评价前3个(1-3)
+import json.decoder
+
 Ev_Scope = ''
 
 # 晒单图片更换 ，默认两张裂图随机 ENV设置： export Ev_img='//img30.360buyimg.com/shaidan/······.jpg'
@@ -522,15 +524,16 @@ def start():
                 }
                 req = requests.post(url, headers=headers, data=data)
                 try:
-                    if req.json()['data']['result'] != {}:
+                    if req.json().get('data').get('result') != {}:
                         # printf("\t晒单成功！！！")
                         Cent[ce]['晒单'] += 1
+                        time.sleep(10)
                     else:
                         printf("\t晒单失败...")
                         printf(req.json())
                     # printf('等待5秒-可持续发展！')
                     time.sleep(20)
-                except KeyError:
+                except (KeyError, json.decoder.JSONDecodeError):
                     printf(f'当前无数据！返回，可能被风控，返回的数据：{req.json()}')
                     return
 
